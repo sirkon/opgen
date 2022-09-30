@@ -170,7 +170,7 @@ func (g *generator) renderSetMethod(r *gogh.GoRenderer[*gogh.Imports], typ strin
 	r.N()
 	for i, cmt := range cmts {
 		if i == 0 {
-			r.L(`// $0 $1`, typ, cmt)
+			r.L(`// $0 $1`, optName(opt, typ), cmt)
 		} else {
 			r.L(`// $0`, cmt)
 		}

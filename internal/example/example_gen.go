@@ -18,7 +18,7 @@ func ExampleOptions() ExampleOptionsType {
 	return res
 }
 
-// Example sets example name.
+// Name sets example name.
 func (o ExampleOptionsType) Name(v string) ExampleOptionsType {
 	o.opts = append(o.opts, func(vv *Example) {
 		vv.setName(v)
@@ -26,7 +26,7 @@ func (o ExampleOptionsType) Name(v string) ExampleOptionsType {
 	return o
 }
 
-// Example sets a logger for an example.
+// Logger sets a logger for an example.
 func (o ExampleOptionsType) Logger(v func(err error)) ExampleOptionsType {
 	o.opts = append(o.opts, func(vv *Example) {
 		vv.setLogger(v)
