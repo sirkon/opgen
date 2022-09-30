@@ -77,7 +77,7 @@ func BufferedReaderLogger(err error) {
 Now, generate a builder:
 
 ```shell
-main -s internal/options BufferedReader
+opgen -s internal/options -d options_gen.go BufferedReader
 ```
 
 It will look for `BufferedReaderXXX` named constants (will provide a default value), variables (no default value) and
