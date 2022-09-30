@@ -40,3 +40,9 @@ func (o ExampleOptionsType) Size(v int64) ExampleOptionsType {
 	})
 	return o
 }
+
+func (o ExampleOptionsType) apply(vv *Example) {
+	for _, opt := range o.opts {
+		opt(vv)
+	}
+}

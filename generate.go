@@ -130,6 +130,7 @@ func (g *generator) render() error {
 func (g *generator) renderBuilder(r *gogh.GoRenderer[*gogh.Imports], typ string) {
 	opts := g.mapping[typ]
 
+	r.N()
 	r.L(`// $0OptionsType for type $0`, typ)
 	r.L(`type $0OptionsType struct{`, typ)
 	r.L(`    opts []func(v *$0)`, typ)
@@ -152,6 +153,13 @@ func (g *generator) renderBuilder(r *gogh.GoRenderer[*gogh.Imports], typ string)
 	for _, opt := range opts {
 		g.renderSetMethod(r, typ, opt)
 	}
+
+	r.N()
+	r.L(`func (o $0OptionsType) apply(vv *$0) {`, typ)
+	r.L(`    for _, opt := range o.opts {`)
+	r.L(`        opt(vv)`)
+	r.L(`    }`)
+	r.L(`}`)
 }
 
 func (g *generator) renderSetMethod(r *gogh.GoRenderer[*gogh.Imports], typ string, opt types.Object) {

@@ -86,19 +86,19 @@ functions (will provide a default value – the function itself) where a type of
 The builder will have methods in case of the file above:
 
 ```go
-func (b *BufferedReaderOptionsType) BufferSize(v int) { … }
-func (b *BufferedReaderOptionsType) Logger(v func(error)) { … }
+func (b BufferedReaderOptionsType) BufferSize(v int) BufferedReaderOptionsType { … }
+func (b BufferedReaderOptionsType) Logger(v func(error)) BufferedReaderOptionsType { … }
 ```
 
 And the usage is supposed to be like this:
 
 ```go
 v, err := cio.NewBufferedReader(
-	r, 
-	cio.BufferedReaderOptions().
-		BufferSize(8192).
-		Logger(func (err error) {
-	        fmt.Println(err)
+    r, 
+    cio.BufferedReaderOptions().
+        BufferSize(8192).
+        Logger(func (err error) {
+            fmt.Println(err)
         }), 
 )
 ```
