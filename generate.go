@@ -92,7 +92,10 @@ func newGenerator(source string, dest string, typs []string) (*generator, error)
 
 	res.mod = m
 
-	res.mapOptions()
+	if err := res.mapOptions(); err != nil {
+		return nil, errors.Wrapf(err, "map options items to types")
+	}
+
 	var failed bool
 	for _, typ := range typs {
 		opts := res.mapping[typ]

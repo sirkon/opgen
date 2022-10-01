@@ -6,7 +6,7 @@ import (
 	"runtime/debug"
 
 	"github.com/alecthomas/kong"
-	"github.com/sirkon/errors"
+	"github.com/sirkon/message"
 	"github.com/sirkon/opgen/internal/app"
 )
 
@@ -49,7 +49,7 @@ func main() {
 	}
 
 	if err := generate(cli.OptionsSourcePackage, string(cli.Dest), types); err != nil {
-		fmt.Printf("\033[31m%s\033[0m\n", errors.Wrap(err, "generate go code"))
+		message.Error(err)
 		os.Exit(1)
 	}
 }

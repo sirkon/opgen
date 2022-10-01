@@ -7,9 +7,10 @@ import (
 	"unicode"
 
 	"github.com/sirkon/errors"
+	"github.com/sirkon/message"
 )
 
-func (g *generator) mapOptions() {
+func (g *generator) mapOptions() error {
 	var names []string
 	for _, file := range g.source.Syntax {
 		ast.Inspect(file, func(node ast.Node) bool {
@@ -34,6 +35,7 @@ func (g *generator) mapOptions() {
 		})
 	}
 
+	var failed bool
 	for _, name := range names {
 		item := g.source.Types.Scope().Lookup(name)
 		switch item.(type) {
@@ -43,9 +45,29 @@ func (g *generator) mapOptions() {
 		}
 
 		if owner := g.owner(item.Name()); owner != "" {
+			if v, ok := item.(*types.Const); ok {
+				// We should prohibit the case of untyped constants.
+				switch v.Type().(*types.Basic).Kind() {
+				case types.UntypedNil, types.UntypedBool, types.UntypedRune, types.UntypedString,
+					types.UntypedInt, types.UntypedFloat, types.UntypedComplex:
+
+					message.Errorf(
+						"%s untyped constants are not supported, please specify constant type explicitly",
+						g.source.Fset.Position(item.Pos()),
+					)
+					failed = true
+				}
+			}
+
 			g.mapping[owner] = append(g.mapping[owner], item)
 		}
 	}
+
+	if failed {
+		return failureError()
+	}
+
+	return nil
 }
 
 // Look for the type that "owns" this name, i.e. that is a tight prefix
