@@ -127,11 +127,18 @@ func (g *generator) extractComments(opt types.Object) []string {
 	}
 
 	var res []string
+	var offs int
 	for i, comment := range group.List {
-		cmt := strings.TrimLeft(comment.Text, "/ ")
+		var cmt string
 		if i == 0 {
-			cmt = strings.TrimPrefix(cmt, opt.Name())
-			cmt = strings.TrimLeft(cmt, " ")
+			cmt = strings.TrimLeft(comment.Text, "/ ")
+			offs = len(comment.Text) - len(cmt)
+			if i == 0 {
+				cmt = strings.TrimPrefix(cmt, opt.Name())
+				cmt = strings.TrimLeft(cmt, " ")
+			}
+		} else {
+			cmt = comment.Text[offs:]
 		}
 		res = append(res, cmt)
 	}
